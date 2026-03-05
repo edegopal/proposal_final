@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You 💖</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ffe6f2 0%, #ffb3d9 100%);
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Floating Hearts */
+        .heart {
+            position: absolute;
+            bottom: -100px;
+            color: rgba(255, 77, 148, 0.3);
+            font-size: 20px;
+            animation: move 10s linear infinite;
+        }
+
+        @keyframes move {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        #mainContent, #catContainer {
+            text-align: center;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 40px;
+            border-radius: 30px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        h1 { color: #ff4d94; font-size: 2.5rem; text-shadow: 2px 2px white; }
+        .buttons { display: flex; justify-content: center; gap: 30px; margin-top: 30px; position: relative; height: 60px; }
+
+        button {
+            padding: 12px 35px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #yesBtn { background-color: #ff4d94; color: white; }
+        #noBtn { background-color: #ffffff; color: #ff4d94; position: absolute; }
+
+        #catContainer { display: none; }
+        img { max-width: 300px; border-radius: 15px; }
+    </style>
+</head>
+<body>
+
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 3 + 7 + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 10000);
+        }
+        setInterval(createHeart, 500);
+    </script>
+
+    <audio id="happyMusic" loop>
+        <source src="perfect.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="mainContent">
+        <h1>Will you be my girlfriend? 💖</h1>
+        <div class="buttons">
+            <button id="yesBtn" onclick="celebrate()">Yes!</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <div id="catContainer">
+        <h1>YAYYYYY! 🎉</h1>
+        <img src="https://media.tenor.com/J79vXID_95gAAAAM/happy-cat-munchkins.gif" alt="Happy Cat">
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const music = document.getElementById('happyMusic');
+
+        noBtn.addEventListener('mouseover', () => {
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+            noBtn.style.left = `${Math.floor(Math.random() * maxX)}px`;
+            noBtn.style.top = `${Math.floor(Math.random() * maxY)}px`;
+        });
+
+        function celebrate() {
+            music.play();
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('catContainer').style.display = 'block';
+
+            var end = Date.now() + (5 * 1000);
+            (function frame() {
+                confetti({ particleCount: 10, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff4d94', '#ffffff'] });
+                confetti({ particleCount: 10, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff4d94', '#ffffff'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+    </script>
+</body>
+</html>
